@@ -14,6 +14,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:palast/app.dart';
 import 'package:palast/core/env/env.dart';
+import 'package:palast/features/capture/presentation/widgets/share_intent_handler.dart';
 
 Future<void> bootstrap() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,7 +37,7 @@ Future<void> bootstrap() async {
 
       runApp(
         const ProviderScope(
-          child: PalastApp(),
+          child: ShareIntentHandler(child: PalastApp()),
         ),
       );
     },

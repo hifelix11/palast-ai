@@ -1,6 +1,8 @@
 /// Maps low-level exceptions into [Failure]s and reports to Sentry.
 library;
 
+import 'dart:async';
+
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -25,5 +27,3 @@ abstract final class ErrorHandler {
     return UnknownFailure(error.toString());
   }
 }
-
-void unawaited(Future<void> future) {}
