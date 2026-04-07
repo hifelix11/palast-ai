@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Palast - iOS Info.plist (minimal stub)
+  TODO(setup): regenerate via `flutter create .` once Flutter is available,
+  then merge these Palast-specific keys back in.
+-->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>CFBundleDevelopmentRegion</key>
+  <string>en</string>
+  <key>CFBundleDisplayName</key>
+  <string>Palast</string>
+  <key>CFBundleExecutable</key>
+  <string>$(EXECUTABLE_NAME)</string>
+  <key>CFBundleIdentifier</key>
+  <string>ai.palast.app</string>
+  <!-- TODO(setup): bundle id is ai.palast.app; ensure Xcode project matches. -->
+  <key>CFBundleName</key>
+  <string>palast</string>
+  <key>CFBundlePackageType</key>
+  <string>APPL</string>
+  <key>CFBundleShortVersionString</key>
+  <string>$(FLUTTER_BUILD_NAME)</string>
+  <key>CFBundleVersion</key>
+  <string>$(FLUTTER_BUILD_NUMBER)</string>
+  <key>MinimumOSVersion</key>
+  <string>16.0</string>
+
+  <key>NSMicrophoneUsageDescription</key>
+  <string>Palast records voice memos so the Librarian can transcribe and file them.</string>
+  <key>NSCameraUsageDescription</key>
+  <string>Palast lets you capture photos to add to your palace.</string>
+  <key>NSPhotoLibraryUsageDescription</key>
+  <string>Palast can pull images you choose into your palace.</string>
+
+  <key>UILaunchStoryboardName</key>
+  <string>LaunchScreen</string>
+  <key>UIMainStoryboardFile</key>
+  <string>Main</string>
+  <key>UISupportedInterfaceOrientations</key>
+  <array>
+    <string>UIInterfaceOrientationPortrait</string>
+  </array>
+
+  <!-- TODO(setup): Sign in with Apple capability must be enabled in Xcode signing. -->
+  <!-- TODO(setup): Associated Domains: applinks:palast.ai -->
+  <!-- TODO(setup): Add an iOS Share Extension target so the share sheet
+       can hand items to Palast via receive_sharing_intent. -->
+
+  <!-- Google Sign-In: REVERSED_CLIENT_ID URL scheme.
+       TODO(setup): drop GoogleService-Info.plist into ios/Runner/ and
+       paste its REVERSED_CLIENT_ID into the array below. -->
+  <key>CFBundleURLTypes</key>
+  <array>
+    <dict>
+      <key>CFBundleTypeRole</key>
+      <string>Editor</string>
+      <key>CFBundleURLSchemes</key>
+      <array>
+        <!-- TODO(setup): <string>com.googleusercontent.apps.YOUR-CLIENT-ID</string> -->
+        <string>ai.palast.app</string>
+      </array>
+    </dict>
+  </array>
+</dict>
+</plist>
