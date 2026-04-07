@@ -22,10 +22,15 @@ enable_signup = true
 
 [auth.external.google]
 enabled = true
-# client_id and secret set via supabase secrets
+client_id = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID)"
+secret = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET)"
+redirect_uri = ""
 
 [auth.external.apple]
 enabled = true
+client_id = "env(SUPABASE_AUTH_EXTERNAL_APPLE_CLIENT_ID)"
+secret = "env(SUPABASE_AUTH_EXTERNAL_APPLE_SECRET)"
+redirect_uri = ""
 
 [storage]
 enabled = true
