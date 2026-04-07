@@ -1,0 +1,52 @@
+# Flutter / Dart
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+pubspec.lock
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Generated
+*.g.dart
+*.freezed.dart
+*.mocks.dart
+lib/l10n/generated/
+
+# Env / secrets
+.env
+.env.local
+.env.*.local
+
+# Supabase
+supabase/.branches
+supabase/.temp
+
+# iOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Runner/GoogleService-Info.plist
+
+# Android
+android/.gradle/
+android/app/google-services.json
+android/local.properties
+android/key.properties
+*.jks
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Coverage
+coverage/
