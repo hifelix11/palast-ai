@@ -61,7 +61,10 @@ class SignInPage extends ConsumerWidget {
                 loading: auth.isLoading,
                 onPressed: controller.signInWithGoogle,
               ),
-              if (!kIsWeb && defaultTargetPlatform == TargetPlatform.iOS) ...[
+              if (!kIsWeb &&
+                  (defaultTargetPlatform == TargetPlatform.iOS ||
+                      defaultTargetPlatform == TargetPlatform.macOS ||
+                      defaultTargetPlatform == TargetPlatform.android)) ...[
                 const SizedBox(height: PalastSpacing.sm),
                 AppButton(
                   label: 'Continue with Apple',

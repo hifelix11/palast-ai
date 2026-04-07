@@ -32,13 +32,15 @@ class SupabaseAuthRepository implements AuthRepository {
       );
       return _client.auth.currentUser;
     }
-    // TODO(setup): provide the Google OAuth client IDs in
-    // ios/Runner/Info.plist (REVERSED_CLIENT_ID) and android/app/google-services.json.
+    // The iOS client ID is read from Info.plist (REVERSED_CLIENT_ID).
+    // serverClientId must be the **Web** OAuth client ID — Supabase
+    // verifies tokens against this audience on both iOS and Android.
     final google = GoogleSignIn(
       scopes: const ['email', 'profile', 'openid'],
-      // serverClientId is the Web OAuth client id from Google Cloud,
-      // required to obtain an idToken on Android.
-      // serverClientId: 'YOUR-WEB-CLIENT-ID.apps.googleusercontent.com',
+      serverClientId:
+          const String.fromEnvironment('GOOGLE_WEB_CLIENT_ID').isEmpty
+              ? null
+              : const String.fromEnvironment('GOOGLE_WEB_CLIENT_ID'),
     );
     final account = await google.signIn();
     if (account == null) return null;
@@ -58,10 +60,12 @@ class SupabaseAuthRepository implements AuthRepository {
 
   @override
   Future<User?> signInWithApple() async {
-    if (kIsWeb ||
-        (defaultTargetPlatform != TargetPlatform.iOS &&
-            defaultTargetPlatform != TargetPlatform.macOS)) {
-      throw const AuthException('Apple Sign-In is only available on iOS.');
+    if (kIsWeb) {
+      await _client.auth.signInWithOAuth(
+        OAuthProvider.apple,
+        redirectTo: Uri.base.origin,
+      );
+      return _client.auth.currentUser;
     }
     final credential = await SignInWithApple.getAppleIDCredential(
       scopes: const [
