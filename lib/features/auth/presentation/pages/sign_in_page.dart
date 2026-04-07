@@ -3,8 +3,7 @@
 /// Two buttons (Google, Apple), a quiet welcome, and the tagline.
 library;
 
-import 'dart:io' show Platform;
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -62,7 +61,7 @@ class SignInPage extends ConsumerWidget {
                 loading: auth.isLoading,
                 onPressed: controller.signInWithGoogle,
               ),
-              if (Platform.isIOS) ...[
+              if (!kIsWeb && defaultTargetPlatform == TargetPlatform.iOS) ...[
                 const SizedBox(height: PalastSpacing.sm),
                 AppButton(
                   label: 'Continue with Apple',

@@ -149,6 +149,7 @@ class SupabaseCaptureRepository implements CaptureRepository {
           null,
           {'duration_seconds': durationSeconds},
         ),
+      _ => throw ArgumentError.value(input, 'input', 'Unknown CaptureInput'),
     };
   }
 

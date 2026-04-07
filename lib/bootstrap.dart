@@ -6,6 +6,7 @@ library;
 
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:posthog_flutter/posthog_flutter.dart';
@@ -17,8 +18,6 @@ import 'package:palast/core/env/env.dart';
 import 'package:palast/features/capture/presentation/widgets/share_intent_handler.dart';
 
 Future<void> bootstrap() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
   await SentryFlutter.init(
     (options) {
       options.dsn = Env.sentryDsn;
@@ -26,17 +25,22 @@ Future<void> bootstrap() async {
       options.attachScreenshot = false;
     },
     appRunner: () async {
+      WidgetsFlutterBinding.ensureInitialized();
+
       await Supabase.initialize(
         url: Env.supabaseUrl,
         anonKey: Env.supabaseAnonKey,
       );
 
-      // PostHog is initialized via the native SDKs as well; this call
-      // makes sure feature flags / identify are ready when the UI mounts.
-      await Posthog().debug(false);
+      if (!kIsWeb) {
+        // PostHog is initialized via the native SDKs as well; this call
+        // makes sure feature flags / identify are ready when the UI mounts.
+        await Posthog().debug(false);
+      }
 
+      const Widget app = ProviderScope(child: PalastApp());
       runApp(
-        const ProviderScope(
+        kIsWeb ? app : const ProviderScope(
           child: ShareIntentHandler(child: PalastApp()),
         ),
       );
