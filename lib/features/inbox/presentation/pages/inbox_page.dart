@@ -19,14 +19,14 @@ class InboxPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Inbox'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.go('/'),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
             onPressed: () => context.go('/search'),
-          ),
-          IconButton(
-            icon: const Icon(Icons.folder_outlined),
-            onPressed: () => context.go('/library'),
           ),
           IconButton(
             icon: const Icon(Icons.settings_outlined),

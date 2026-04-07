@@ -16,7 +16,7 @@ class InboxItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.go('/item/${item.id}'),
+      onTap: () => context.push('/item/${item.id}'),
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: PalastSpacing.lg,

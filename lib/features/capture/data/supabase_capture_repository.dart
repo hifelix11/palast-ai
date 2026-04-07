@@ -9,6 +9,7 @@ library;
 
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:path/path.dart' as p;
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -51,6 +52,14 @@ class SupabaseCaptureRepository implements CaptureRepository {
         itemId: itemId,
         file: File(input.localPath),
         filename: 'voice-memo.m4a',
+      );
+    } else if (input is CaptureInputBytes) {
+      storagePath = await _uploadBytes(
+        userId: user.id,
+        itemId: itemId,
+        bytes: input.bytes,
+        filename: input.filename,
+        mimeType: input.mimeType,
       );
     }
 
@@ -105,6 +114,25 @@ class SupabaseCaptureRepository implements CaptureRepository {
     );
   }
 
+  Future<String> _uploadBytes({
+    required String userId,
+    required String itemId,
+    required Uint8List bytes,
+    required String filename,
+    String? mimeType,
+  }) async {
+    final path = p.posix.join('items', userId, itemId, filename);
+    await _client.storage.from(AppConstants.itemsBucket).uploadBinary(
+          path,
+          bytes,
+          fileOptions: FileOptions(
+            upsert: true,
+            contentType: mimeType,
+          ),
+        );
+    return path;
+  }
+
   Future<String> _uploadFile({
     required String userId,
     required String itemId,
@@ -148,6 +176,13 @@ class SupabaseCaptureRepository implements CaptureRepository {
           'Voice memo',
           null,
           {'duration_seconds': durationSeconds},
+        ),
+      CaptureInputBytes(:final filename, :final sourceType, :final mimeType) =>
+        (
+          sourceType,
+          filename,
+          null,
+          {'filename': filename, 'mime_type': mimeType},
         ),
       _ => throw ArgumentError.value(input, 'input', 'Unknown CaptureInput'),
     };

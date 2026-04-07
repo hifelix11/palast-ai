@@ -26,8 +26,12 @@ class SupabaseItemDetailRepository implements ItemDetailRepository {
         .single();
 
     final item = Item.fromJson(row);
-    final content = (row['item_content'] as List?)?.firstOrNull
-        as Map<String, dynamic>?;
+    final rawContent = row['item_content'];
+    final content = switch (rawContent) {
+      Map<String, dynamic> m => m,
+      List<dynamic> l when l.isNotEmpty => l.first as Map<String, dynamic>,
+      _ => null,
+    };
     final folderRows = (row['item_folders'] as List?) ?? const [];
     final tagRows = (row['item_tags'] as List?) ?? const [];
 

@@ -15,6 +15,7 @@ import 'package:palast/features/auth/presentation/pages/sign_in_page.dart';
 import 'package:palast/features/capture/presentation/pages/capture_page.dart';
 import 'package:palast/features/inbox/presentation/pages/inbox_page.dart';
 import 'package:palast/features/item_detail/presentation/pages/item_detail_page.dart';
+import 'package:palast/features/library/presentation/pages/folder_detail_page.dart';
 import 'package:palast/features/library/presentation/pages/library_page.dart';
 import 'package:palast/features/search/presentation/pages/search_page.dart';
 import 'package:palast/features/settings/presentation/pages/settings_page.dart';
@@ -41,15 +42,15 @@ GoRouter appRouter(AppRouterRef ref) {
       ),
       GoRoute(
         path: '/',
-        builder: (_, __) => const InboxPage(),
+        builder: (_, __) => const LibraryPage(),
         routes: [
           GoRoute(
             path: 'capture',
             builder: (_, __) => const CapturePage(),
           ),
           GoRoute(
-            path: 'library',
-            builder: (_, __) => const LibraryPage(),
+            path: 'inbox',
+            builder: (_, __) => const InboxPage(),
           ),
           GoRoute(
             path: 'search',
@@ -58,6 +59,13 @@ GoRouter appRouter(AppRouterRef ref) {
           GoRoute(
             path: 'settings',
             builder: (_, __) => const SettingsPage(),
+          ),
+          GoRoute(
+            path: 'folder/:folderId',
+            builder: (context, state) => FolderDetailPage(
+              folderId: state.pathParameters['folderId']!,
+              folderName: state.uri.queryParameters['name'] ?? 'Folder',
+            ),
           ),
           GoRoute(
             path: 'item/:itemId',

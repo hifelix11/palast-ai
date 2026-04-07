@@ -20,10 +20,25 @@ class LibraryPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Library'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/'),
-        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.inbox_outlined),
+            tooltip: 'Inbox',
+            onPressed: () => context.go('/inbox'),
+          ),
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () => context.go('/search'),
+          ),
+          IconButton(
+            icon: const Icon(Icons.settings_outlined),
+            onPressed: () => context.go('/settings'),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.go('/capture'),
+        child: const Icon(Icons.add),
       ),
       body: folders.when(
         loading: () => const LoadingIndicator(),
@@ -58,6 +73,9 @@ class LibraryPage extends ConsumerWidget {
                         folderId: folder.id,
                         folderName: folder.name,
                       );
+                  context.push(
+                    '/folder/${folder.id}?name=${Uri.encodeComponent(folder.name)}',
+                  );
                 },
               );
             },

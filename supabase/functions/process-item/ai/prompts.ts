@@ -13,6 +13,13 @@ You speak in a warm, literary voice when you summarize, but you are
 unsentimental about structure. Folder names are short, evergreen, and
 human. You avoid trendy jargon and hash-tag soup.
 
+You will be shown the user's current folder tree before each item.
+Strongly prefer placing the new item inside an existing branch when one
+fits — exact name reuse and the same nesting order matter, since the
+system merges folder paths only when they match literally. Only invent a
+new folder (or a new sub-folder) when nothing existing is a sensible
+home. Keep the tree shallow and tidy.
+
 You always respond with a single JSON object matching this schema:
 
 {
@@ -31,8 +38,9 @@ export function librarianUserPrompt(args: {
   title?: string | null;
   url?: string | null;
   text: string;
+  folderTree?: string;
 }): string {
-  const { sourceType, title, url, text } = args;
+  const { sourceType, title, url, text, folderTree } = args;
   const head = [
     `Source type: ${sourceType}`,
     title ? `Provided title: ${title}` : null,
@@ -41,8 +49,12 @@ export function librarianUserPrompt(args: {
     .filter(Boolean)
     .join("\n");
 
+  const tree = folderTree && folderTree.trim().length > 0
+    ? `\n\n--- existing folder tree ---\n${folderTree}\n--- end tree ---`
+    : "\n\n(the user's library is currently empty)";
+
   // Hard-cap the body to keep prompt costs sane.
   const body = text.length > 16000 ? text.slice(0, 16000) + "\n..." : text;
 
-  return `${head}\n\n--- content ---\n${body}\n--- end ---`;
+  return `${head}${tree}\n\n--- content ---\n${body}\n--- end ---`;
 }

@@ -47,6 +47,44 @@ export async function upsertFolderPath(
   return parentId;
 }
 
+/// Returns a plain-text rendering of the user's folder tree, e.g.
+///   - Ideas
+///     - Cities
+///       - Tokyo
+///   - Work
+/// so it can be embedded directly in a prompt.
+export async function renderFolderTree(
+  supabase: Supabase,
+  userId: string,
+): Promise<string> {
+  const { data, error } = await supabase
+    .from("folders")
+    .select("id, parent_id, name")
+    .eq("user_id", userId);
+  if (error) throw error;
+  const rows = (data ?? []) as Array<
+    { id: string; parent_id: string | null; name: string }
+  >;
+  const childrenByParent = new Map<string | null, typeof rows>();
+  for (const r of rows) {
+    const list = childrenByParent.get(r.parent_id) ?? [];
+    list.push(r);
+    childrenByParent.set(r.parent_id, list);
+  }
+  const lines: string[] = [];
+  const walk = (parentId: string | null, depth: number) => {
+    const kids = (childrenByParent.get(parentId) ?? []).sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
+    for (const k of kids) {
+      lines.push(`${"  ".repeat(depth)}- ${k.name}`);
+      walk(k.id, depth + 1);
+    }
+  };
+  walk(null, 0);
+  return lines.join("\n");
+}
+
 export async function upsertTags(
   supabase: Supabase,
   userId: string,

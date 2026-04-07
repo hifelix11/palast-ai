@@ -2,6 +2,8 @@
 /// or types something into Palast.
 library;
 
+import 'dart:typed_data';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:palast/shared/models/item.dart';
@@ -29,6 +31,14 @@ class CaptureInput with _$CaptureInput {
     required ItemSourceType sourceType,
     String? mimeType,
   }) = CaptureInputFile;
+
+  /// In-memory bytes (used on web where there is no file path).
+  const factory CaptureInput.bytes({
+    required Uint8List bytes,
+    required String filename,
+    required ItemSourceType sourceType,
+    String? mimeType,
+  }) = CaptureInputBytes;
 
   /// A voice memo recorded inside Palast.
   const factory CaptureInput.voiceMemo({

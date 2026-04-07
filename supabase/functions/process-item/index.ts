@@ -13,7 +13,11 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
 
 import { extract } from "./extractors/mod.ts";
-import { upsertFolderPath, upsertTags } from "./folder_manager.ts";
+import {
+  renderFolderTree,
+  upsertFolderPath,
+  upsertTags,
+} from "./folder_manager.ts";
 import { chat } from "./ai/openrouter_client.ts";
 import { LIBRARIAN_SYSTEM_PROMPT, librarianUserPrompt } from "./ai/prompts.ts";
 import { Item, LibrarianResult } from "./types.ts";
@@ -62,7 +66,11 @@ Deno.serve(async (req) => {
     // 1. Extract.
     const extracted = await extract(item, SUPABASE_URL, SERVICE_ROLE);
 
-    // 2. Ask the Librarian.
+    // 2. Snapshot the user's existing folder tree so the Librarian can
+    //    reuse branches instead of inventing parallel hierarchies.
+    const folderTree = await renderFolderTree(supabase, item.user_id);
+
+    // 3. Ask the Librarian.
     const completion = await chat([
       { role: "system", content: LIBRARIAN_SYSTEM_PROMPT },
       {
@@ -72,6 +80,7 @@ Deno.serve(async (req) => {
           title: extracted.title ?? item.title,
           url: item.original_url,
           text: extracted.text,
+          folderTree,
         }),
       },
     ]);
